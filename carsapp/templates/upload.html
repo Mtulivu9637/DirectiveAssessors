@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assessment Upload Section</title>
+    <style>
+      /* General Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+      }
+
+      /* Container and Layout */
+      .container {
+        border-radius: 10px;
+        max-width: 12000px;
+
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Header Section */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+      }
+
+      .header .logo {
+        width: 150px;
+        height: 50px;
+        background-color: #ccc;
+        text-align: center;
+        line-height: 50px;
+        font-size: 1.5rem;
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      /* Assessor Details and Upload Section */
+      .main-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 20px 0;
+      }
+
+      .assessor-details,
+      .upload-section {
+        flex: 1;
+        min-width: 280px;
+        margin: 10px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fafafa;
+      }
+
+      .assessor-details {
+        text-align: center;
+      }
+
+      .assessor-details img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        margin-bottom: 10px;
+      }
+
+      .upload-section input[type="file"],
+      .upload-section input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .upload-section input[type="submit"] {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .upload-section input[type="submit"]:hover {
+        background-color: #218838;
+      }
+
+      /* Footer Section */
+      .footer {
+        text-align: center;
+        padding: 20px 0;
+        background-color: #2743be;
+        color: white;
+      }
+
+      .footer a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      /* Responsive Styles */
+      @media screen and (max-width: 768px) {
+        .header h1 {
+          font-size: 1.2rem;
+        }
+
+        .upload-section input[type="file"],
+        .upload-section input[type="text"],
+        .upload-section input[type="submit"] {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <div class="header">
+        <div class="logo">
+          Directive
+          <p></p>
+        </div>
+        <h1>Upload Section</h1>
+      </div>
+
+      <!-- Main Content Section -->
+      <div class="main-content">
+        <!-- Assessor Details Section -->
+        <div class="assessor-details">
+          <h2>Welcome Assessor</h2>
+          <br />
+          <img
+            src="https://res.cloudinary.com/db4t9ubti/image/upload/v1728556031/x7no6hoxciru7kcwdrtp.avif"
+            alt="Assessor Image"
+          />
+          <h2>{{ request.assessorProfile.username }}</h2>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+          <h2>Upload Files Section</h2>
+          <br />
+          <form
+            id="uploadForm"
+            action="{% url 'upload_excel' %}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <label for="uploadBtn"></label>
+            <input
+              type="file"
+              id="uploadBtn"
+              name="excel_file"
+              accept="image/*"
+              required
+            />
+
+            <label for="description">Brief Description</label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              placeholder="Add a brief description"
+              required
+            />
+
+            <center><input type="submit" value="Upload" /></center>
+          </form>
+        </div>
+        {% if success %}
+        <script>
+          alert("File uploaded successfully!");
+          window.location.href = "{% url 'home' %}"; // Replace 'homeview' with the actual name of your home page URL
+        </script>
+        {% endif %}
+      </div>
+
+      <!-- Footer Section -->
+      <div class="footer">
+        <p>
+          Contact us and Email through
+          <a href="mailto:directiveassessors@yahoo.com"
+            >info@directiveassessors.co.ke</a
+          >
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
