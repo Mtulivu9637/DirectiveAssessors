@@ -1,13 +1,11 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Assessors and Valuation Sheets</title>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <title>Admin Dashboard</title>
     <style>
-      /* Reset and Base Styles */
+      /* Reset styles */
       * {
         margin: 0;
         padding: 0;
@@ -16,276 +14,459 @@
 
       body {
         font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        background-color: #f4f6f9;
+        background-color: #f4f4f4;
         padding: 20px;
-        padding-top: 80px; /* Space for the fixed header */
       }
 
-      /* Header */
-      header {
+      /* Fixed Bar with Logo and Logout */
+      .fixed-bar {
+        width: 100%;
+        background-color: #2743be;
+        color: #fff;
+        padding: 15px 20px;
         position: fixed;
         top: 0;
         left: 0;
-        right: 0;
-        height: 60px;
-        background-color: #2980b9;
-        color: #ecf0f1;
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        padding: 0 20px;
         z-index: 1000;
       }
 
-      header img {
-        height: 40px; /* Logo height */
-        margin-right: 15px; /* Space between logo and title */
+      .fixed-bar .logo {
+        font-size: 1.5rem;
       }
 
-      h2 {
-        margin: 20px 0;
-        color: #2c3e50;
-      }
-
-      /* Forms and Tables */
-      form {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-      }
-
-      form h3 {
-        margin-bottom: 15px;
-        color: #2c3e50;
-      }
-
-      form .form-group {
-        margin-bottom: 15px;
-      }
-
-      form .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        color: #34495e;
-      }
-
-      form .form-group input,
-      form .form-group select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #bdc3c7;
-        border-radius: 4px;
-      }
-
-      form button {
-        padding: 10px 15px;
-        background-color: #2980b9;
-        color: #ecf0f1;
+      .fixed-bar .logout-btn {
+        background-color: #ff4b5c;
+        color: white;
+        padding: 8px 15px;
         border: none;
-        border-radius: 4px;
+        border-radius: 5px;
         cursor: pointer;
       }
 
-      form button:hover {
-        background-color: #1abc9c;
+      /* Layout for Admin Dashboard */
+      .dashboard-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 80px; /* Offset for the fixed bar */
+        flex-wrap: wrap;
+      }
+
+      /* Left Panel */
+      .left-panel {
+        width: 25%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .left-panel h2 {
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        display: block;
+        width: 100%;
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background-color: #0056b3;
+      }
+
+      /* Right Panel */
+      .right-panel {
+        width: 70%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .right-panel h2 {
+        margin-bottom: 20px;
+      }
+
+      /* Form Styles */
+      form {
+        margin-bottom: 20px;
+      }
+
+      form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      form input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .table-container {
+        overflow-x: auto;
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
-        background-color: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
       }
 
       table th,
       table td {
-        padding: 12px 15px;
+        border: 1px solid #ddd;
+        padding: 10px;
         text-align: left;
-        border-bottom: 1px solid #ecf0f1;
       }
 
       table th {
-        background-color: #2980b9;
-        color: #ecf0f1;
+        background-color: #f8f9fa;
       }
 
-      table tr:hover {
-        background-color: #f1f1f1;
-      }
-
-      /* Responsive Styles */
-      @media (max-width: 768px) {
-        form {
-          padding: 10px;
-        }
-
-        table th,
-        table td {
-          padding: 8px 10px;
-        }
-      }
-
-      /* Action Buttons */
-      .action-btn {
-        padding: 5px 10px;
-        margin-right: 5px;
-        background-color: #f39c12;
-        color: #ecf0f1;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9em;
-      }
-
-      .action-btn.delete {
-        background-color: #e74c3c;
-      }
-
-      .action-btn:hover {
-        opacity: 0.8;
-      }
-
-      /* Download Buttons Styling */
       .download-btn {
+        background-color: #28a745;
+        color: white;
         padding: 5px 10px;
-        margin-right: 5px;
-        background-color: #27ae60;
-        color: #ecf0f1;
         border: none;
-        border-radius: 4px;
+        border-radius: 5px;
         cursor: pointer;
-        font-size: 0.9em;
-      }
-
-      .download-btn.pdf {
-        background-color: #c0392b;
       }
 
       .download-btn:hover {
-        opacity: 0.8;
+        background-color: #218838;
       }
-      .content {
-            display: none; /* Initially hide the content */
-            margin-top: 10px;
-            border: 1px solid #ccc;
-            padding: 10px;
+
+      .submit-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .submit-btn:hover {
+        background-color: #0056b3;
+      }
+
+      /* Hide all sections initially */
+      .section {
+        display: none;
+      }
+
+      /* Footer Section */
+      .footer {
+        text-align: center;
+        padding: 10px;
+        background-color: #2743be;
+        color: white;
+        margin-top: 20px;
+      }
+
+      /* Responsive Styling */
+      @media screen and (max-width: 1024px) {
+        .left-panel {
+          width: 100%;
+          margin-bottom: 20px;
         }
-        .toggle {
-            cursor: pointer;
-            color: blue;
-            text-decoration: underline;
+
+        .right-panel {
+          width: 100%;
         }
+      }
+
+      @media screen and (max-width: 768px) {
+        .fixed-bar {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .dashboard-container {
+          flex-direction: column;
+        }
+
+        .left-panel,
+        .right-panel {
+          width: 100%;
+        }
+
+        table,
+        table th,
+        table td {
+          font-size: 0.9rem;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        form input {
+          padding: 5px;
+          font-size: 0.9rem;
+        }
+
+        .download-btn,
+        .submit-btn {
+          padding: 7px;
+          font-size: 0.9rem;
+        }
+
+        .fixed-bar {
+          padding: 10px;
+        }
+
+        .fixed-bar .logo {
+          font-size: 1.2rem;
+        }
+
+        .fixed-bar .logout-btn {
+          padding: 6px 12px;
+        }
+      }
     </style>
+    <script>
+      // Show different sections based on button clicked
+      function showSection(sectionId) {
+        const sections = document.querySelectorAll(".section");
+        sections.forEach((section) => {
+          section.style.display = "none"; // Hide all sections
+        });
+        document.getElementById(sectionId).style.display = "block"; // Show selected section
+      }
+
+      // Function to add an assessor (simulate)
+      function addAssessor(event) {
+        event.preventDefault();
+        alert("Assessor added successfully!");
+        document.getElementById("add-assessor-form").reset();
+      }
+
+      // Function to upload valuation sheet (simulate)
+      function uploadValuationSheet(event) {
+        event.preventDefault();
+        alert("Valuation sheet uploaded successfully!");
+        document.getElementById("add-valuation-form").reset();
+      }
+    </script>
   </head>
   <body>
-    <!-- Header -->
-    <header>
-      <img src="{% static 'img/logo.png'%}" alt="Company Logo" />
-      <h1 class="my-4 text-center">Welcome to Admin Dashboard, {{ request.user.username }}</h1>
-    </header>
-
-    <!-- Assessors Section -->
-    <div class="section" id="assessors-section">
-        <div class="toggle">
-          <button class="btn btn-primary"> Add Assessor </button></div><br />
-        <div class="content">
-      <!-- Add Assessor Form -->
-      <form id="add-assessor-form" method="POST" action="{% url 'add_assessor' %}">
-        {% csrf_token %}
-        <h3>Add New Assessor</h3>
-        <div class="form-group">
-            <label for="name">Assessor Name:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-            <label for="id_number">ID Number:</label>
-            <input type="text" class="form-control" id="id_number" name="id_number" required>
-        </div>
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Assessor</button>
-      </form>
-    </div>
+    <!-- Fixed Bar with Logo and Logout Button -->
+    <div class="fixed-bar">
+      <div class="logo">directiveassessors</div>
+      <a href="{% url 'logout_view' %}">
+        <button class="logout-btn">Logout</button>
+      </a>
     </div>
 
-    <!-- Valuation Sheets Section -->
-    <div class="section" id="valuation-sheets-section">
-      <!-- Upload Valuation Sheet Form -->
-      <form id="upload-valuation-form"
-      class="upload-form"
-      action="{% url 'upload_excel' %}"  
-      method="POST"
-      enctype="multipart/form-data">
-      {% csrf_token %}
-        <h3>Upload New Valuation Sheet</h3>
-        <div class="form-group">
-            <input type="file" name="excel_file" accept=".xls,.xlsx" required /><br></br>
-            <textarea
-              name="description"
-              rows="4"
-              placeholder="Short description..."
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+      <!-- Left Panel (Admin Actions) -->
+      <div class="left-panel">
+        <h2>Admin Dashboard</h2>
+        <button class="btn" onclick="showSection('add-assessor-section')">
+          Add Assessor
+        </button>
+        <button class="btn" onclick="showSection('manage-assessor-section')">
+          Manage Assessors
+        </button>
+        <button
+          class="btn"
+          onclick="showSection('add-valuation-sheet-section')"
+        >
+          Add Valuation Sheet
+        </button>
+      </div>
+
+      <!-- Right Panel (Manage Uploaded Sheets and Dynamic Content) -->
+      <div class="right-panel">
+        <!-- Add Assessor Section -->
+        <div id="add-assessor-section" class="section" style="display: none">
+          <h2>Add Assessor</h2>
+          <form
+            id="add-assessor-form"
+            method="POST"
+            action="{% url 'add_assessor' %}"
+          >
+            {% csrf_token %}
+            <label for="assessor-name">Name</label>
+            <input type="text" id="assessor-name" name="name" required />
+
+            <label for="assessor-id">ID</label>
+            <input type="text" id="assessor-id" name="id_number" required />
+
+            <label for="assessor-username">Username</label>
+            <input
+              type="text"
+              id="assessor-username"
+              name="username"
               required
-            ></textarea>
-        </div>
-        <button type="submit">Upload</button>
-      </form>
+            />
 
-      <!-- Valuation Sheets List Table -->
-      <h3>Uploaded Valuation Sheets</h3>
-      <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>Uploaded At</th>
-                <th>Download Excel</th>
-                <th>Download PDF</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for file in files %}
-            <tr>
-                <td>{{ file.file.name }}</td>
-                <td>{{ file.uploaded_at }}</td>
-                <td><a href="{% url 'download_excel' file.id %}" class="btn btn-success">Download Excel</a></td>
-                <td><a href="{% url 'convert_excel_to_pdf' file.id %}" class="btn btn-success">Download PDF</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4" class="text-center">No reports uploaded yet.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <label for="assessor-email">Email</label>
+            <input type="email" id="assessor-email" name="email" required />
+
+            <label for="assessor-password">Password</label>
+            <input
+              type="password"
+              id="assessor-password"
+              name="password"
+              required
+            />
+
+            <button type="submit" class="submit-btn">Submit</button>
+          </form>
+        </div>
+
+        <!-- Manage Assessors Section -->
+        <div id="manage-assessor-section" class="section" style="display: none">
+          <h2>Manage Assessors</h2>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for assessor in assessors %}
+                <tr>
+                  <td>{{ assessor.name }}</td>
+                  <td>{{ assessor.id_number }}</td>
+                  <td>{{ assessor.username }}</td>
+                  <td>{{ assessor.email }}</td>
+                  <td>
+                    <a href="{% url 'edit_assessor' assessor.id %}">
+                      <button class="edit-btn">Edit</button>
+                    </a>
+                    <a href="{% url 'delete_assessor' assessor.id %}">
+                      <button class="delete-btn">Delete</button>
+                    </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5">No assessors available.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Add Valuation Sheet Section -->
+        <div
+          id="add-valuation-sheet-section"
+          class="section"
+          style="display: none"
+        >
+          <h2>Add Valuation Sheet</h2>
+          <form
+            id="add-valuation-form"
+            method="POST"
+            action="{% url 'upload_excel' %}"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <label for="valuation-file">Upload Excel File</label>
+            <input
+              type="file"
+              id="valuation-file"
+              name="excel_file"
+              accept=".xlsx,.xls"
+              required
+            />
+
+            <button type="submit" class="submit-btn">Upload</button>
+          </form>
+        </div>
+
+        <!-- Manage Uploaded Sheets Section -->
+        <div id="manage-sheets-section">
+          <h2>Manage Uploaded Sheets</h2>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>File Name</th>
+                  <th>Uploaded At</th>
+                  <th>Download Excel</th>
+                  <th>Download PDF</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for file in files %}
+                <tr>
+                  <td>{{ file.file.name }}</td>
+                  <td>{{ file.uploaded_at }}</td>
+                  <td>
+                    <a
+                      href="{% url 'download_excel' file.id %}"
+                      class="download-btn"
+                      >Download Excel</a
+                    >
+                  </td>
+                  <td>
+                    <a
+                      href="{% url 'convert_excel_to_pdf' file.id %}"
+                      class="download-btn"
+                      >Download PDF</a
+                    >
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="4">No reports uploaded yet.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 
-   <!-- Logout Button -->
-   <div class="text-center">
-    <a href="{% url 'logout_view' %}" class="btn btn-danger">Logout</a>
-</div>
-</div>
+    <!-- Footer (optional) -->
+    <div class="footer">
+      <p>
+        Contact us at
+        <a href="mailto:directiveassessors@yahoo.com"
+          >Info@directiveassessors.co.ke</a
+        >
+      </p>
+    </div>
 
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script> 
-<script>
-    const toggle = document.querySelector('.toggle');
-    const content = document.querySelector('.content');
-
-    toggle.addEventListener('click', () => {
-        content.style.display = content.style.display === 'none' ? 'block' : 'none';
-    });
-</script>
+    <script>
+      function showSection(sectionId) {
+        const sections = document.querySelectorAll(".section");
+        sections.forEach((section) => {
+          if (section.id === sectionId) {
+            section.style.display = "block";
+          } else {
+            section.style.display = "none";
+          }
+        });
+      }
+    </script>
   </body>
 </html>
